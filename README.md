@@ -1,0 +1,4 @@
+RestService
+===========
+
+Example using RESTEasy
