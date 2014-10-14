@@ -1,0 +1,79 @@
+<configuration scan="true" scanPeriod="30 seconds">
+    <jmxConfigurator/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${log.format}</Pattern>
+        </layout>
+        <param name="target" value="System.out"/>
+    </appender>
+
+    <appender name="STDOUT_ERROR" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>NEUTRAL</onMismatch>
+        </filter>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>${log.format}</Pattern>
+        </layout>
+        <param name="target" value="System.err"/>
+    </appender>
+
+    <!--<appender name="EXCEPTIONS" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<filter class="ch.qos.logback.core.filter.EvaluatorFilter">-->
+            <!--<evaluator>-->
+                <!--<expression>throwable != null</expression>-->
+            <!--</evaluator>-->
+            <!--<OnMismatch>DENY</OnMismatch>-->
+            <!--<OnMatch>ACCEPT</OnMatch>-->
+        <!--</filter>-->
+
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<FileNamePattern>${log.root}exceptions/logback-exceptions.%d{yyyy-MM-dd}.log.gz</FileNamePattern>-->
+            <!--<MaxHistory>365</MaxHistory>-->
+        <!--</rollingPolicy>-->
+
+        <!--<layout class="ch.qos.logback.classic.PatternLayout">-->
+            <!--<Pattern>${log.format}</Pattern>-->
+        <!--</layout>-->
+    <!--</appender>-->
+
+    <appender name="CORE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.root}core/core.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <MaxHistory>5</MaxHistory>
+        </rollingPolicy>
+
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%5p [%d][%thread][%logger] %msg%n</Pattern>
+        </layout>
+    </appender>
+
+    <logger name="com.iprogi" level="INFO" additivity="false">
+        <appender-ref ref="CORE"/>
+        <appender-ref ref="STDOUT_ERROR"/>
+        <appender-ref ref="EXCEPTIONS"/>
+    </logger>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDOUT_ERROR"/>
+        <appender-ref ref="EXCEPTIONS"/>
+    </root>
+</configuration>
